@@ -22,6 +22,7 @@ Partial Class Form1
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.Button2 = New System.Windows.Forms.Button()
@@ -30,6 +31,8 @@ Partial Class Form1
         Me.Bth_Source = New System.Windows.Forms.Button()
         Me.Txt_Path_Source = New System.Windows.Forms.TextBox()
         Me.DataSet1 = New System.Data.DataSet()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -46,7 +49,7 @@ Partial Class Form1
         '
         Me.ListView1.Location = New System.Drawing.Point(34, 97)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(485, 222)
+        Me.ListView1.Size = New System.Drawing.Size(485, 182)
         Me.ListView1.TabIndex = 5
         Me.ListView1.UseCompatibleStateImageBehavior = False
         '
@@ -95,11 +98,23 @@ Partial Class Form1
         '
         Me.DataSet1.DataSetName = "NewDataSet"
         '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Location = New System.Drawing.Point(34, 285)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(268, 23)
+        Me.ProgressBar1.TabIndex = 11
+        '
+        'Timer1
+        '
+        Me.Timer1.Interval = 1
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(541, 344)
+        Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.Bth_Dest)
         Me.Controls.Add(Me.Txt_Path_Dest)
         Me.Controls.Add(Me.Bth_Source)
@@ -122,5 +137,7 @@ Partial Class Form1
     Friend WithEvents Bth_Source As System.Windows.Forms.Button
     Friend WithEvents Txt_Path_Source As System.Windows.Forms.TextBox
     Friend WithEvents DataSet1 As System.Data.DataSet
+    Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
+    Friend WithEvents Timer1 As System.Windows.Forms.Timer
 
 End Class

@@ -8,6 +8,8 @@ Imports System.Data
 
 
 Public Class Form1
+    Dim dataTable As New DataTable
+    Dim f As FileIO
     ''' <summary>
     ''' 初期化処理
     ''' </summary>
@@ -50,8 +52,8 @@ Public Class Form1
     ''' <summary>
     ''' ぼたん１
     ''' </summary>
-     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Dim f As FileIO
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
         Dim i As Integer = 0
         f = New FileIO()
         f.source_file_path = Me.Txt_Path_Source.Text
@@ -60,28 +62,28 @@ Public Class Form1
             ' MessageBox.Show(f.make_file_list.Count)
             ListView1.BeginUpdate() '描画ストップ
 
-            Dim dataTable As New DataTable
+
 
             ' CustomerID 列を作成して追加します
             Dim colWork As New DataColumn("NO", GetType(String))
-            dataTable.Columns.Add(colWork)
+            DataTable.Columns.Add(colWork)
 
             ' CustomerID 列をキー配列に追加し、DataTable にバインドします
             Dim Keys(0) As DataColumn
             Keys(0) = colWork
-            dataTable.PrimaryKey = Keys
+            DataTable.PrimaryKey = Keys
 
             ' CustomerName 列を作成して追加します
             colWork = New DataColumn("比較元パス", GetType(String))
-            dataTable.Columns.Add(colWork)
+            DataTable.Columns.Add(colWork)
 
             ' LastOrderDate 列を作成して追加します
             colWork = New DataColumn("比較先パス", GetType(String))
-            dataTable.Columns.Add(colWork)
+            DataTable.Columns.Add(colWork)
 
             ' LastOrderDate 列を作成して追加します
             colWork = New DataColumn("結果", GetType(String))
-            dataTable.Columns.Add(colWork)
+            DataTable.Columns.Add(colWork)
 
             For Each file As String In f.make_file_list
                 i += 1
@@ -92,7 +94,7 @@ Public Class Form1
                 row("比較元パス") = file
                 row("比較先パス") = file.Replace(f.source_file_path, f.destination_file_path)
                 row("結果") = String.Empty
-                dataTable.Rows.Add(row)
+                DataTable.Rows.Add(row)
 
 
 
@@ -121,10 +123,10 @@ Public Class Form1
             Next
 
 
-            ' Iterate through a collection
-            For Each myRow As DataRow In dataTable.Rows
-                MessageBox.Show(myRow.Item("比較元パス").ToString)
-            Next
+            '' Iterate through a collection
+            'For Each myRow As DataRow In DataTable.Rows
+            '    MessageBox.Show(myRow.Item("比較元パス").ToString)
+            'Next
 
 
 
@@ -133,20 +135,30 @@ Public Class Form1
 
     End Sub
     Delegate Sub SetExpensiveProcessDelegate(ByVal lst As ListViewItem)
- 
+
     Private Sub Button2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
 
-        ListView1.BeginUpdate() '描画ストップ
+        'ListView1.BeginUpdate() '描画ストップ
 
-        Parallel.ForEach(ListView1.Items.OfType(Of ListViewItem)(), AddressOf ExpensiveProcess)
+        'Parallel.ForEach(dataTable.Rows.OfType(Of DataRow)(), AddressOf ExpensiveProcess)
+        'ListView1.Clear()
+        'ListView1.Tag = dataTable.Rows
+        Timer1.Enabled = True
+        For Each myRow As ListViewItem In ListView1.Items
 
+            MessageBox.Show(myRow.SubItems(0).Text)
+            If (f.CompareFiles(myRow.SubItems(1).Text, myRow.SubItems(2).Text) = True) Then
+                myRow.SubItems(3).Text = "OK"
+            Else
+                myRow.SubItems(3).Text = "NG"
+            End If
 
-
-        ListView1.EndUpdate()
+        Next
+        Timer1.Enabled = False
+        ' ListView1.EndUpdate()
     End Sub
-    Sub ExpensiveProcess(ByVal lst As ListViewItem)
-        Dim f = New FileIO
-        Dim tmp As Boolean
+    Sub ExpensiveProcess(ByVal lst As DataRow)
+
         'MessageBox.Show(lst.Text)
         'If ListView1.InvokeRequired Then
         '    Invoke(New SetExpensiveProcessDelegate(AddressOf ExpensiveProcess))
@@ -160,7 +172,8 @@ Public Class Form1
         'System.Threading.Monitor.Enter(Me)
         'lst.SubItems(3).Text = "s"
         'System.Threading.Monitor.Exit(Me)
-        Me.settext("aaa")
+        'MessageBox.Show(lst("NO"))
+        ' lst("結果").update = "OK"
 
     End Sub
     Private Sub SetText(ByVal [text] As String)
@@ -174,33 +187,33 @@ Public Class Form1
         'End If
     End Sub
 
-    Private Function MakeCustomersDataTable() As DataTable
-        ' プログラムが生成したデータを格納する DataTable を宣言します
-        Dim dataTable As New DataTable
+    'Private Function MakeCustomersDataTable() As DataTable
+    '' プログラムが生成したデータを格納する DataTable を宣言します
+    'Dim dataTable As New DataTable
 
-        ' CustomerID 列を作成して追加します
-        Dim colWork As New DataColumn("NO", GetType(String))
-        dataTable.Columns.Add(colWork)
+    '' CustomerID 列を作成して追加します
+    'Dim colWork As New DataColumn("NO", GetType(String))
+    'dataTable.Columns.Add(colWork)
 
-        ' CustomerID 列をキー配列に追加し、DataTable にバインドします
-        Dim Keys(0) As DataColumn
-        Keys(0) = colWork
-        dataTable.PrimaryKey = Keys
+    '' CustomerID 列をキー配列に追加し、DataTable にバインドします
+    'Dim Keys(0) As DataColumn
+    'Keys(0) = colWork
+    'dataTable.PrimaryKey = Keys
 
-        ' CustomerName 列を作成して追加します
-        colWork = New DataColumn("比較元パス", GetType(String))
-        dataTable.Columns.Add(colWork)
+    '' CustomerName 列を作成して追加します
+    'colWork = New DataColumn("比較元パス", GetType(String))
+    'dataTable.Columns.Add(colWork)
 
-        ' LastOrderDate 列を作成して追加します
-        colWork = New DataColumn("比較先パス", GetType(String))
-        dataTable.Columns.Add(colWork)
+    '' LastOrderDate 列を作成して追加します
+    'colWork = New DataColumn("比較先パス", GetType(String))
+    'dataTable.Columns.Add(colWork)
 
-        ' LastOrderDate 列を作成して追加します
-        colWork = New DataColumn("結果", GetType(String))
-        dataTable.Columns.Add(colWork)
+    '' LastOrderDate 列を作成して追加します
+    'colWork = New DataColumn("結果", GetType(String))
+    'dataTable.Columns.Add(colWork)
 
-        Return dataTable
-    End Function
+    'Return dataTable
+    'End Function
 
 
     Function Show_FolderBrowserDialog() As String
@@ -258,5 +271,13 @@ Public Class Form1
     End Sub
     Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         initialize()
+    End Sub
+
+    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        ProgressBar1.Minimum = 0
+        ProgressBar1.Maximum = f.file_size
+
+        ProgressBar1.Value = f.read_file_dize
+        ProgressBar1.Update()
     End Sub
 End Class

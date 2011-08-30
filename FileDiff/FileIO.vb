@@ -4,7 +4,20 @@ Public Class FileIO
 
     Private _source_file_path As String = String.Empty
     Private _destination_file_path As String = String.Empty
+    Private _file_size As Long
+    Private _read_file_dize As Long
+    ReadOnly Property file_size() As String
+        Get
+            Return _file_size
+        End Get
 
+    End Property
+    ReadOnly Property read_file_dize() As String
+        Get
+            Return _read_file_dize
+        End Get
+
+    End Property
 
     Public Property source_file_path() As String
         Get
@@ -102,18 +115,22 @@ Public Class FileIO
             End Try
             ' Ensure that the files are the same length before comparing them line by line.
             If .GetFileInfo(file1).Length = .GetFileInfo(file2).Length Then
+                _file_size = .GetFileInfo(file1).Length
                 Using file1Reader As New FileStream(file1, FileMode.Open), _
                       file2Reader As New FileStream(file2, FileMode.Open)
                     Dim byte1 As Integer = file1Reader.ReadByte()
                     Dim byte2 As Integer = file2Reader.ReadByte()
                     ' If byte1 or byte2 is a negative value, we have reached the end of the file.
+                    _read_file_dize = 0
                     While byte1 >= 0 AndAlso byte2 >= 0
+                        _read_file_dize += 1
                         If (byte1 <> byte2) Then
                             filesAreEqual = False
                             Exit While
                         Else
                             filesAreEqual = True
                         End If
+
                         ' Read the next byte.
                         byte1 = file1Reader.ReadByte()
                         byte2 = file2Reader.ReadByte()
