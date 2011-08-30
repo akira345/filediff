@@ -6,7 +6,32 @@ FileDiff
 </name>
 </assembly>
 <members>
-<member name="P:FileDiff.My.Resources.Resources.ResourceManager">
+<member name="M:FileDiff.FileIO.make_file_list">
+	<summary>
+ 指定したディレクトリを探索し、ファイル一覧をフルパスで返します。
+ </summary>
+	<returns>ファイル一覧</returns>
+	<remarks>
+ ファイル一覧はstring型配列で返します。
+ </remarks>
+</member><member name="M:FileDiff.FileIO.GetFiles(System.String)">
+	<summary>
+ 指定したディレクトリを探索し、ファイル一覧をフルパスで返します。
+ </summary>
+	<param name="path">ファイルパス</param>
+	<returns>ファイル一覧</returns>
+	<remarks>
+ ファイル一覧はArrayList型で返します。
+ アクセス権が無いファイル、フォルダは無視します。
+ </remarks>
+</member><member name="M:FileDiff.FileIO.CompareFiles(System.String,System.String)">
+	<summary>
+ ２つのファイルを比較します
+ </summary>
+	<param name="file1">ファイルパスその１</param>
+	<param name="file2">ファイルパスその２</param>
+	<returns>True:一致 False:不一致</returns>
+</member><member name="P:FileDiff.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
@@ -19,6 +44,24 @@ FileDiff
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
+</member><member name="M:FileDiff.Form1.initialize">
+	<summary>
+ 初期化処理
+ </summary>
+</member><member name="M:FileDiff.Form1._chk(System.String)">
+	<summary>
+ ディレクトリパス指定チェック
+ </summary>
+	<param name="path">ファイルパス</param>
+	<returns>True:チェックOK False:チェックNG</returns>
+</member><member name="M:FileDiff.Form1.Button1_Click(System.Object,System.EventArgs)">
+	<summary>
+ ぼたん１
+ </summary>
+</member><member name="M:FileDiff.Form1.Bth_Source_Click(System.Object,System.EventArgs)">
+	<summary>
+ 比較元ディレクトリ選択ボタン
+ </summary>
 </member>
 </members>
 </doc>

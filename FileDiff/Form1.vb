@@ -2,11 +2,15 @@
 Imports System.Collections.ObjectModel
 Imports System.Threading
 Imports System.IO
+Imports System.Data
+
 
 
 
 Public Class Form1
-
+    ''' <summary>
+    ''' 初期化処理
+    ''' </summary>
     Private Sub initialize()
         With ListView1
             .View = View.Details    '詳細表示にする。
@@ -19,7 +23,11 @@ Public Class Form1
             .GridLines = True
         End With
     End Sub
-    
+    ''' <summary>
+    ''' ディレクトリパス指定チェック
+    ''' </summary>
+    ''' <param name="path">ファイルパス</param>
+    ''' <returns>True:チェックOK False:チェックNG</returns>
     Private Function _chk(ByVal path As String) As Boolean
 
         If System.IO.File.Exists(path) Then
@@ -39,16 +47,56 @@ Public Class Form1
         End If
         Return True
     End Function
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Dim f = New FileIO
+    ''' <summary>
+    ''' ぼたん１
+    ''' </summary>
+     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim f As FileIO
         Dim i As Integer = 0
-        f.source_file_path = "c:\support"
-        f.destination_file_path = "D:\"
+        f = New FileIO()
+        f.source_file_path = Me.Txt_Path_Source.Text
+        f.destination_file_path = Me.Txt_Path_Dest.Text
         If (_chk(f.source_file_path) = True AndAlso _chk(f.destination_file_path) = True) Then
             ' MessageBox.Show(f.make_file_list.Count)
             ListView1.BeginUpdate() '描画ストップ
+
+            Dim dataTable As New DataTable
+
+            ' CustomerID 列を作成して追加します
+            Dim colWork As New DataColumn("NO", GetType(String))
+            dataTable.Columns.Add(colWork)
+
+            ' CustomerID 列をキー配列に追加し、DataTable にバインドします
+            Dim Keys(0) As DataColumn
+            Keys(0) = colWork
+            dataTable.PrimaryKey = Keys
+
+            ' CustomerName 列を作成して追加します
+            colWork = New DataColumn("比較元パス", GetType(String))
+            dataTable.Columns.Add(colWork)
+
+            ' LastOrderDate 列を作成して追加します
+            colWork = New DataColumn("比較先パス", GetType(String))
+            dataTable.Columns.Add(colWork)
+
+            ' LastOrderDate 列を作成して追加します
+            colWork = New DataColumn("結果", GetType(String))
+            dataTable.Columns.Add(colWork)
+
             For Each file As String In f.make_file_list
                 i += 1
+
+                ' 行を追加します
+                Dim row As DataRow = dataTable.NewRow
+                row("NO") = i
+                row("比較元パス") = file
+                row("比較先パス") = file.Replace(f.source_file_path, f.destination_file_path)
+                row("結果") = String.Empty
+                dataTable.Rows.Add(row)
+
+
+
+
                 Dim item As New ListViewItem
                 item.Text = i
                 item.SubItems.Add(file)
@@ -64,41 +112,151 @@ Public Class Form1
                     ListView1.Items(i - 1).BackColor = Color.AliceBlue
                 End If
             Next
+
             ListView1.EndUpdate()
             '列ヘッダーの幅を自動的にサイズ変更する
             Dim colHed As ColumnHeader
             For Each colHed In ListView1.Columns
                 colHed.Width = -2
             Next
+
+
+            ' Iterate through a collection
+            For Each myRow As DataRow In dataTable.Rows
+                MessageBox.Show(myRow.Item("比較元パス").ToString)
+            Next
+
+
+
+
         End If
 
     End Sub
     Delegate Sub SetExpensiveProcessDelegate(ByVal lst As ListViewItem)
  
+    Private Sub Button2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
 
+        ListView1.BeginUpdate() '描画ストップ
+
+        Parallel.ForEach(ListView1.Items.OfType(Of ListViewItem)(), AddressOf ExpensiveProcess)
+
+
+
+        ListView1.EndUpdate()
+    End Sub
     Sub ExpensiveProcess(ByVal lst As ListViewItem)
         Dim f = New FileIO
         Dim tmp As Boolean
         'MessageBox.Show(lst.Text)
-        If ListView1.InvokeRequired Then
-            Invoke(New SetExpensiveProcessDelegate(AddressOf ExpensiveProcess))
-            Return
-            'tmp = f.CompareFiles(lst.SubItems(1).Text, lst.SubItems(2).Text)
+        'If ListView1.InvokeRequired Then
+        '    Invoke(New SetExpensiveProcessDelegate(AddressOf ExpensiveProcess))
+        '    Return
+        '    'tmp = f.CompareFiles(lst.SubItems(1).Text, lst.SubItems(2).Text)
 
-            'MessageBox.Show(lst.SubItems(3).Text)
-            'MessageBox.Show(lst.Text)
-        End If
-        Interlocked.Exchange(lst.SubItems(3).Text, "a")
+        '    'MessageBox.Show(lst.SubItems(3).Text)
+        '    'MessageBox.Show(lst.Text)
+        'End If
+        'Interlocked.Exchange(lst.SubItems(3).Text, "a")
+        'System.Threading.Monitor.Enter(Me)
+        'lst.SubItems(3).Text = "s"
+        'System.Threading.Monitor.Exit(Me)
+        Me.settext("aaa")
+
+    End Sub
+    Private Sub SetText(ByVal [text] As String)
+
+        ' InvokeRequired required compares the thread ID of the' calling thread to the thread ID of the creating thread.' If these threads are different, it returns true.
+        'If Me.ListView1.InvokeRequired Then
+        '    Dim d As New SetTextCallback(AddressOf SetText)
+        '    Me.Invoke(d, New Object() {[text]})
+        'Else
+        '    Me.ListView1.Text = [text]
+        'End If
     End Sub
 
+    Private Function MakeCustomersDataTable() As DataTable
+        ' プログラムが生成したデータを格納する DataTable を宣言します
+        Dim dataTable As New DataTable
+
+        ' CustomerID 列を作成して追加します
+        Dim colWork As New DataColumn("NO", GetType(String))
+        dataTable.Columns.Add(colWork)
+
+        ' CustomerID 列をキー配列に追加し、DataTable にバインドします
+        Dim Keys(0) As DataColumn
+        Keys(0) = colWork
+        dataTable.PrimaryKey = Keys
+
+        ' CustomerName 列を作成して追加します
+        colWork = New DataColumn("比較元パス", GetType(String))
+        dataTable.Columns.Add(colWork)
+
+        ' LastOrderDate 列を作成して追加します
+        colWork = New DataColumn("比較先パス", GetType(String))
+        dataTable.Columns.Add(colWork)
+
+        ' LastOrderDate 列を作成して追加します
+        colWork = New DataColumn("結果", GetType(String))
+        dataTable.Columns.Add(colWork)
+
+        Return dataTable
+    End Function
+
+
+    Function Show_FolderBrowserDialog() As String
+        Dim FolderBrowserDialog1 As FolderBrowserDialog
+
+        Try
+            ' FolderBrowserDialog の新しいインスタンスを生成する (デザイナから追加している場合は必要ない)
+            FolderBrowserDialog1 = New FolderBrowserDialog()
+
+            ' ダイアログの説明を設定する
+            FolderBrowserDialog1.Description = "フォルダを指定してください。"
+
+            ' ルートになる特殊フォルダを設定する (初期値 SpecialFolder.Desktop)
+            FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
+
+            ' 初期選択するパスを設定する
+            'FolderBrowserDialog1.SelectedPath = "C:\Program Files\"
+
+            ' [新しいフォルダ] ボタンを表示する (初期値 True)
+            FolderBrowserDialog1.ShowNewFolderButton = False
+
+            ' ダイアログを表示し、戻り値が [OK] の場合は、選択したディレクトリを表示する
+            If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
+                Return FolderBrowserDialog1.SelectedPath.ToString
+            Else
+                Return String.Empty
+            End If
+
+        Finally
+            If Not FolderBrowserDialog1 Is Nothing Then
+                ' 不要になった時点で破棄する (正しくは オブジェクトの破棄を保証する を参照)
+                FolderBrowserDialog1.Dispose()
+            End If
+        End Try
+    End Function
+    ''' <summary>
+    ''' 比較元ディレクトリ選択ボタン
+    ''' </summary>
+    Private Sub Bth_Source_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Bth_Source.Click
+        Dim ret As String
+        ret = Show_FolderBrowserDialog()
+        If (ret <> String.Empty) Then
+            Txt_Path_Source.Text = ret
+        End If
+    End Sub
+    ''' <summary>
+    ''' 比較先ディレクトリ選択ボタン
+    ''' </summary>
+    Private Sub Bth_Dest_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Bth_Dest.Click
+        Dim ret As String
+        ret = Show_FolderBrowserDialog()
+        If (ret <> String.Empty) Then
+            Txt_Path_Dest.Text = ret
+        End If
+    End Sub
     Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         initialize()
-    End Sub
-
-    Private Sub Button2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-
-        ListView1.BeginUpdate() '描画ストップ
-        Parallel.ForEach(ListView1.Items.OfType(Of ListViewItem)(), AddressOf ExpensiveProcess)
-        ListView1.EndUpdate()
     End Sub
 End Class

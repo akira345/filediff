@@ -2,9 +2,9 @@
 
 Public Class FileIO
 
-
     Private _source_file_path As String = String.Empty
     Private _destination_file_path As String = String.Empty
+
 
     Public Property source_file_path() As String
         Get
@@ -22,6 +22,13 @@ Public Class FileIO
             _destination_file_path = filepath
         End Set
     End Property
+    ''' <summary>
+    ''' 指定したディレクトリを探索し、ファイル一覧をフルパスで返します。
+    ''' </summary>
+    ''' <returns>ファイル一覧</returns>
+    ''' <remarks>
+    ''' ファイル一覧はstring型配列で返します。
+    ''' </remarks>
     Public Function make_file_list() As String()
 
         Try
@@ -33,7 +40,15 @@ Public Class FileIO
         End Try
 
     End Function
-
+    ''' <summary>
+    ''' 指定したディレクトリを探索し、ファイル一覧をフルパスで返します。
+    ''' </summary>
+    ''' <param name="path">ファイルパス</param>
+    ''' <returns>ファイル一覧</returns>
+    ''' <remarks>
+    ''' ファイル一覧はArrayList型で返します。
+    ''' アクセス権が無いファイル、フォルダは無視します。
+    ''' </remarks>
     Private Function GetFiles(ByVal path As String)
         Dim _files = New ArrayList
         'パスが存在しない場合は例外発生
@@ -63,12 +78,28 @@ Public Class FileIO
         Return _files
     End Function
 
-
+    ''' <summary>
+    ''' ２つのファイルを比較します
+    ''' </summary>
+    ''' <param name="file1">ファイルパスその１</param>
+    ''' <param name="file2">ファイルパスその２</param>
+    ''' <returns>True:一致 False:不一致</returns>
     Public Function CompareFiles(ByVal file1 As String, ByVal file2 As String) As Boolean
         ' Set to true if the files are equal; false otherwise
         Dim filesAreEqual As Boolean = False
 
         With My.Computer.FileSystem
+            Try
+                If (.FileExists(file1) = False) OrElse (.FileExists(file2) = False) Then
+                    Throw New System.IO.DirectoryNotFoundException
+                End If
+            Catch ex As System.IO.DirectoryNotFoundException
+                Return False
+            Catch ex As System.UnauthorizedAccessException
+                Return False
+            Catch ex As ApplicationException
+                MessageBox.Show(ex.Message)
+            End Try
             ' Ensure that the files are the same length before comparing them line by line.
             If .GetFileInfo(file1).Length = .GetFileInfo(file2).Length Then
                 Using file1Reader As New FileStream(file1, FileMode.Open), _
