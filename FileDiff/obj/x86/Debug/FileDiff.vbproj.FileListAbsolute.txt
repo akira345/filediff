@@ -20,3 +20,6 @@ C:\Documents and Settings\dosmania\My Documents\Visual Studio 2010\Projects\File
 C:\Documents and Settings\dosmania\My Documents\Visual Studio 2010\Projects\FileDiff\FileDiff\obj\x86\Debug\FileDiff.Resources.resources
 C:\Documents and Settings\dosmania\My Documents\Visual Studio 2010\Projects\FileDiff\FileDiff\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\Documents and Settings\dosmania\My Documents\Visual Studio 2010\Projects\FileDiff\FileDiff\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\program\filediff\FileDiff\obj\x86\Debug\FileDiff.exe
+D:\program\filediff\FileDiff\obj\x86\Debug\FileDiff.xml
+D:\program\filediff\FileDiff\obj\x86\Debug\FileDiff.pdb
