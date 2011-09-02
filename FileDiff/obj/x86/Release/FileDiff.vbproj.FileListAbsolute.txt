@@ -1,0 +1,11 @@
+D:\program\filediff\FileDiff\bin\Release\FileDiff.exe
+D:\program\filediff\FileDiff\bin\Release\FileDiff.pdb
+D:\program\filediff\FileDiff\bin\Release\FileDiff.xml
+D:\program\filediff\FileDiff\obj\x86\Release\ResolveAssemblyReference.cache
+D:\program\filediff\FileDiff\obj\x86\Release\FileDiff.Form1.resources
+D:\program\filediff\FileDiff\obj\x86\Release\FileDiff.Resources.resources
+D:\program\filediff\FileDiff\obj\x86\Release\GenerateResource.read.1.tlog
+D:\program\filediff\FileDiff\obj\x86\Release\GenerateResource.write.1.tlog
+D:\program\filediff\FileDiff\obj\x86\Release\FileDiff.exe
+D:\program\filediff\FileDiff\obj\x86\Release\FileDiff.xml
+D:\program\filediff\FileDiff\obj\x86\Release\FileDiff.pdb

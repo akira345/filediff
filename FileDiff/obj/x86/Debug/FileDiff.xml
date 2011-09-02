@@ -31,7 +31,15 @@ FileDiff
 	<returns>True:チェックOK False:チェックNG</returns>
 </member><member name="M:FileDiff.Form1.Button1_Click(System.Object,System.EventArgs)">
 	<summary>
- ぼたん１
+ ファイルリスト作成
+ </summary>
+</member><member name="M:FileDiff.Form1.Button2_Click_1(System.Object,System.EventArgs)">
+	<summary>
+ ファイルリストからファイルを比較する
+ </summary>
+</member><member name="M:FileDiff.Form1.Show_FolderBrowserDialog">
+	<summary>
+ フォルダを開くダイアログ表示
  </summary>
 </member><member name="M:FileDiff.Form1.Bth_Source_Click(System.Object,System.EventArgs)">
 	<summary>
@@ -40,6 +48,10 @@ FileDiff
 </member><member name="M:FileDiff.Form1.Bth_Dest_Click(System.Object,System.EventArgs)">
 	<summary>
  比較先ディレクトリ選択ボタン
+ </summary>
+</member><member name="M:FileDiff.Form1.Form1_Load(System.Object,System.EventArgs)">
+	<summary>
+ フォーム読み込み時
  </summary>
 </member><member name="M:FileDiff.FileIO.make_file_list">
 	<summary>
